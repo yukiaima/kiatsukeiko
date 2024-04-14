@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>気圧傾向記号問題</title>
+</head>
+<body>
+
+<!-- 問題作成と答え表示 -->
+<div style="text-align:center">
+    <a href="https://harenote.com/glossary/pressure-change/" target="_blank">参考サイト</a>
+    <h1>問題自動作成</h1>
+    <form id="form1" action="#">
+        <input type="button" onclick="click_button()" value="問題作成・答え表示">
+    </form>    
+</div>
+
+<div style="text-align:center">
+<script>
+'use strict';
+
+//変数の宣言
+let this_element = document.currentScript; //この<script>要素
+let img_width = 80; //画像のサイズ
+let state_QA = 'A' //問題(Q) or 答え(A) の表示用フラグ
+let img_name; // 画像名を格納する変数
+let explain; //説明文を格納する変数
+let explain_list = [
+    ['jousyou-kakou-150x150.png', '上昇後、下降 現在の気圧は3時間前と等しい または3時間前より高い'],
+    ['jousyou-ittei-150x150.png', '上昇後、一定 または緩く上昇 現在の気圧は3時間前より高い'],
+    ['ittei-jousyou-150x150.png', '下降または一定後上昇 または上昇後、急上昇 現在の気圧は3時間前より高い'],
+    ['kakou-jousyou-150x150.png', '下降後、上昇 現在の気圧は3時間前と等しい または3時間前より低い'],
+    ['kakou-ittei-150x150.png', '下降後、一定 または緩く下降 現在の気圧は3時間前より低い'],
+    ['ttei-150x150.png', '一定後、下降 または上昇後、下降 または下降後、急下降 現在の気圧は3時間前より低い']
+]
+
+//関数定義
+function make_test(){
+    //取得する配列の行インデックス
+    let i = Math.floor( Math.random() * explain_list.length);
+    
+    // 画像、説明文
+    img_name = explain_list[i][0];
+    explain = explain_list[i][1];
+    
+    this_element.insertAdjacentHTML('beforebegin', 
+    '<figure><img src="記号\\' + img_name + '" alt="図が取得できません" width="' + img_width + '"><figcaption></figcaption></figure>');
+}
+
+function show_answer(){
+    this_element.insertAdjacentHTML('beforebegin', '<p>' + explain + '</p>');
+}
+
+function click_button(){
+  //state_QAがAなら、問題を表示して、Qに変更
+  if (state_QA == 'A'){
+        make_test();
+        state_QA = 'Q';
+    }
+  //state_QAがQなら、答えを表示して、Aに変更
+  else if (state_QA == 'Q'){
+        show_answer();
+        state_QA = 'A';
+    }
+}
+
+// htmlへ出力（全て出力）
+this_element.insertAdjacentHTML('afterend', '<h1>気圧傾向記号一覧</h1><table><tbody id="list_table"></tbody></table>');
+let tr_text = ''; //trに書き出すhtmlを格納する変数
+for (let i = 0; i < explain_list.length; i++){
+    // 画像、説明文
+    img_name = explain_list[i][0];
+    explain = explain_list[i][1];
+    
+    // 表に書き出すhtml
+    tr_text += '<td class="img"><img src="記号\\' + img_name + '" alt="図が取得できません" width="' + img_width + '"></td><td class="explain">' + explain + '</td>';
+    
+    // 図2つたまったら、trに出力して、tr_textをクリア
+    if (i%2 == 1){
+        document.getElementById('list_table').insertAdjacentHTML('beforeend', tr_text);
+        tr_text = ''
+    }
+    
+}
+
+</script>
+</div>
+
+<noscript>
+<p>このサイトではJavaScriptを使用していますので、有効にしてください。</p>
+</noscript>
+
+</body>
+</html>
